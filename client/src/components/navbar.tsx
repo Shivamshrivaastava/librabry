@@ -19,7 +19,6 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home", show: true },
-    { href: "/my-books", label: "My Books", show: isAuthenticated },
     { href: "/browse", label: "Browse", show: true },
   ];
 

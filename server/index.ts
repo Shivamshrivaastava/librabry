@@ -2,12 +2,18 @@ import express, { type Request, Response, NextFunction } from "express";
 import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(
+  cors({
+    origin: "http://localhost:5174", // frontend origin
+    credentials: true,               // allow cookies/session
+  })
+);
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
