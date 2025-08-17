@@ -3,19 +3,23 @@ import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import cors from "cors";
-import path from "path";
+import * as nodePath from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// ✅ Hardcoded client URL (change this when deployed client has live URL)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = nodePath.dirname(__filename);
+
+// ✅ Hardcoded client URL (change this when deployed)
 const CLIENT_URL = "http://localhost:5173";
 
 app.use(
   cors({
-    origin: true,
+    origin: CLIENT_URL,
     credentials: true,
   })
 );
@@ -63,9 +67,9 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
 
-    const clientDistPath = path.resolve(__dirname, "public");
+    const clientDistPath = nodePath.resolve(__dirname, "public");
     app.get("*", (_req, res) => {
-      res.sendFile(path.join(clientDistPath, "index.html"));
+      res.sendFile(nodePath.join(clientDistPath, "index.html"));
     });
   }
 
