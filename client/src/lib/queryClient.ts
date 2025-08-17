@@ -1,6 +1,10 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
-const API_BASE_URL = "http://localhost:5000"; 
+// 👇 Automatically switch base URL for API depending on environment
+const API_BASE_URL =
+  import.meta.env.MODE === "production"
+    ? "https://librabry.onrender.com"
+    : "http://localhost:5000";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -42,7 +46,7 @@ export const getQueryFn: <T>(options: {
     }
 
     await throwIfResNotOk(res);
-    return (await res.json());
+    return await res.json();
   };
 
 export const queryClient = new QueryClient({
